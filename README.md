@@ -23,6 +23,5 @@ detectPrivateBrowsing(myCallback, ignoreBotBrowsing);
 
 For a complete example with JS and HTML see the `example.html` file.
 
-If you have a website, probably you want to ignore Bots Browsing mode passing `true` to second parameter of     
-`detectPrivateBrowsing` method. If you pass `false` or omit the second param, the code will return that the Bot is  
-browsing in private/incognito mode.
+If you have a website, probably you want to ignore Bots Browsing mode passing `true` or omitting the second parameter of     
+`detectPrivateBrowsing` method. If you pass `false`, the code will return that the Bot is browsing in private/incognito mode.

@@ -34,7 +34,11 @@ function isBotBrowsing() {
 }
 
 function detectPrivateBrowsing(callback, ignoreBotBrowsing) {
-    if(ignoreBotBrowsing && isBotBrowsing()) {
+    if(typeof ignoreBotBrowsing === 'undefined') {
+        ignoreBotBrowsing = true;
+    }
+
+    if(ignoreBotBrowsing === true && isBotBrowsing()) {
         return false;
     }
 

@@ -23,10 +23,12 @@
         }
 
         message.innerHTML = "Normal browsing";
-        return;
     };
 
-    var ignoreBotBrowsing = false;
-    detectPrivateBrowsing(myCallback, ignoreBotBrowsing);
+    // Bots will not be tested
+    detectPrivateBrowsing(myCallback);
+
+    // Will return true for Bots
+    // detectPrivateBrowsing(myCallback, false);
 </script>
 </html>
