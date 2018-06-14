@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test incognito or private browsing</title>
+
+    <script src="incognito_private_browsing_detector.js" type="application/javascript"></script>
+</head>
+
+<body>
+    <div id="message">Testing...</div>
+</body>
+
+<script type="application/javascript">
+    var myCallback = function (isPrivate) {
+        console.log('Is private or incognito?');
+        console.log(isPrivate);
+
+        var message = document.getElementById("message");
+        if (isPrivate) {
+            message.innerHTML = "Incognito/Private browsing detected!";
+            return;
+        }
+
+        message.innerHTML = "Normal browsing";
+        return;
+    };
+
+    detectPrivateBrowsing(myCallback);
+</script>
+</html>
