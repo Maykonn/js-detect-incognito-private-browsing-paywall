@@ -4,20 +4,19 @@
     <meta charset="UTF-8">
     <title>Test incognito or private browsing</title>
 
-    <script src="incognito_private_browsing_detector.js" type="application/javascript"></script>
+    <script src="BrowsingModeDetector.js" type="application/javascript"></script>
 </head>
 
 <body>
     <div id="message">Testing...</div>
 </body>
-
 <script type="application/javascript">
-    var myCallback = function (isPrivate) {
+    var myCallback = function (browsingInIncognitoMode) {
         console.log('Is private or incognito?');
-        console.log(isPrivate);
+        console.log(browsingInIncognitoMode);
 
         var message = document.getElementById("message");
-        if (isPrivate) {
+        if (browsingInIncognitoMode) {
             message.innerHTML = "Incognito/Private browsing detected!";
             return;
         }
@@ -25,10 +24,11 @@
         message.innerHTML = "Normal browsing";
     };
 
-    // Bots will not be tested
-    detectPrivateBrowsing(myCallback);
+    // Bots will be ignored
+    (new BrowsingModeDetector()).do(myCallback);
+    //or (new BrowsingModeDetector()).ignoringBots().do(myCallback);
 
-    // Will return true for Bots
-    // detectPrivateBrowsing(myCallback, false);
+    // Will return as private/incognito navigation when bots browsing
+    //(new BrowsingModeDetector()).notIgnoringBots().do(myCallback);
 </script>
 </html>
