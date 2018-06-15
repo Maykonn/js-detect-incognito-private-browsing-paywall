@@ -12,8 +12,7 @@
 </body>
 <script type="application/javascript">
     var myCallback = function (browsingInIncognitoMode) {
-        console.log('Is private or incognito?');
-        console.log(browsingInIncognitoMode);
+        console.log('Is Private or Incognito Browsing Mode:', browsingInIncognitoMode);
 
         var message = document.getElementById("message");
         if (browsingInIncognitoMode) {
@@ -24,11 +23,16 @@
         message.innerHTML = "Normal browsing";
     };
 
-    // Bots will be ignored
-    (new BrowsingModeDetector()).do(myCallback);
-    //or (new BrowsingModeDetector()).ignoringBots().do(myCallback);
+    var BrowsingModeDetector = new BrowsingModeDetector();
 
-    // Will return as private/incognito navigation when bots browsing
-    //(new BrowsingModeDetector()).notIgnoringBots().do(myCallback);
+    // Bots will be ignored:
+    BrowsingModeDetector.do(myCallback);
+    // or BrowsingModeDetector.ignoringBots().do(myCallback);
+
+    // You can just test if is bot, with:
+    console.log('Is Bot:', BrowsingModeDetector.isBotBrowsing());
+
+    // Will return as private/incognito navigation when bots browsing:
+    // BrowsingModeDetector.notIgnoringBots().do(myCallback);
 </script>
 </html>

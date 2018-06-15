@@ -10,25 +10,46 @@ This detector can identify Bots Browsing your application and you can turn on/tu
 
 ## How to use
 
-Passing a callback to `detectPrivateBrowsing` method you can implement the needed behaviour testing  
-the `isPrivate` value:
+### Implementing behaviour based on Browsing Mode:   
+Passing a callback to `BrowsingModeDetector.do()` method you can implement the needed behaviour testing the returned value:
 
 ```
-var myCallback = function (isPrivate) {
+var myCallback = function (browsingInIncognitoMode) {
     console.log('Is private or incognito?');
-    console.log(isPrivate);
-  
-    if (isPrivate) {
-        // ... implements the desired behaviour when is in private/incognito mode
-        // ... why not a paywall screen?
+    console.log(browsingInIncognitoMode);
+    
+    var message = document.getElementById("message");
+    if (browsingInIncognitoMode) {
+        message.innerHTML = "Incognito/Private browsing detected!";
+        return;
     }
+    
+    message.innerHTML = "Normal browsing";
 };
-
-var ignoreBotBrowsing = true;
-detectPrivateBrowsing(myCallback, ignoreBotBrowsing);
+  
+var BrowsingModeDetector = new BrowsingModeDetector();
+BrowsingModeDetector.do(myCallback);
 ```
 
-For a complete example with JS and HTML see the `example.html` file.
+### Ignoring (or not) browsing mode for Bots
+If you have a Website, probably you want to ignore if Bots are browsing:
+```
+var BrowsingModeDetector = new BrowsingModeDetector();
+BrowsingModeDetector.do(myCallback); 
+// or BrowsingModeDetector.ignoringBots().do(myCallback);
+```
 
-If you have a Website, probably you want to ignore the detection for Bots passing `true` or omitting the second parameter of  
-`detectPrivateBrowsing` method. If you pass `false`, the code will return that the Bot is browsing in private/incognito mode.
+Or not (`.do()` always will return `false` to callback):
+```
+var BrowsingModeDetector = new BrowsingModeDetector();
+BrowsingModeDetector.notIgnoringBots().do(myCallback);
+```
+
+### Bot Browsing Detection:
+You can test if is a Bot browsing too:
+```
+console.log('Is Bot:', BrowsingModeDetector.isBotBrowsing());
+```
+
+### Examples:
+For a complete example with JS and HTML see the `example.html` file.
