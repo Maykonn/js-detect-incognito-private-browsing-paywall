@@ -259,16 +259,36 @@ var SafariBrowser = function (BrowsingModeDetector) {
     this.BrowsingModeDetector = BrowsingModeDetector;
 
     this.detectBrowsingMode = function () {
+        // iOS 11
+        // From gist discussion: https://gist.github.com/cou929/7973956#gistcomment-2272103
         try {
-            window.localStorage.setItem('i', 'o');
+            window.openDatabase(null, null, null, null);
         } catch (e) {
             this.BrowsingModeDetector.setBrowsingInIncognitoMode();
         }
 
-        if (typeof this.BrowsingModeDetector.getBrowsingMode() === 'undefined') {
-            this.BrowsingModeDetector.setBrowsingInNormalMode();
-            window.localStorage.removeItem('i');
+        // Older Safari
+        try {
+            if (localStorage.length) {
+                this.BrowsingModeDetector.setBrowsingInNormalMode();
+            } else {
+                localStorage.i = 1;
+                localStorage.removeItem('i');
+                this.BrowsingModeDetector.setBrowsingInNormalMode();
+            }
+        } catch (e) {
+            // From: https://gist.github.com/jherax/a81c8c132d09cc354a0e2cb911841ff1
+            // Safari only enables cookie in private mode
+            // if cookie is disabled then all client side storage is disabled
+            // if all client side storage is disabled, then there is no point
+            // in using private mode
+            if (navigator.cookieEnabled) {
+                this.BrowsingModeDetector.setBrowsingInIncognitoMode();
+            } else {
+                this.BrowsingModeDetector.setBrowsingInNormalMode();
+            }
         }
+
     };
 
     return this;
