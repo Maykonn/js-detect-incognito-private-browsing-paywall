@@ -71,20 +71,6 @@ var BrowsingModeDetector = function () {
         );
     };
 
-    this.isIE10OrLater = function (user_agent) {
-        var ua = user_agent.toLowerCase();
-        if (ua.indexOf('msie') === 0 && ua.indexOf('trident') === 0) {
-            return false;
-        }
-
-        var match = /(?:msie|rv:)\s?([\d\.]+)/.exec(ua);
-        if (match && parseInt(match[1], 10) >= 10) {
-            return true;
-        }
-
-        return false;
-    };
-
     this.retry = function (ready, callback) {
         var iteration = 0;
         var maxRetry = 50;
@@ -124,7 +110,7 @@ var BrowserFactory = function () {
         }
 
         return _browser = _resolve(BrowsingModeDetector);
-    }
+    };
 
     /**
      * @param {BrowsingModeDetector} BrowsingModeDetector
@@ -136,11 +122,30 @@ var BrowserFactory = function () {
             return new WebkitBrowser(BrowsingModeDetector);
         } else if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
             return new FirefoxBrowser(BrowsingModeDetector);
-        } else if (BrowsingModeDetector.isIE10OrLater(window.navigator.userAgent)) {
+        } else if (_isIE10OrLater(window.navigator.userAgent)) {
             return new IE10OrLaterBrowser(BrowsingModeDetector);
         } else if (window.localStorage && /Safari/.test(window.navigator.userAgent)) {
             return new SafariBrowser(BrowsingModeDetector);
         }
+    };
+
+    /**
+     * @param userAgent
+     * @returns {boolean}
+     * @private
+     */
+    var _isIE10OrLater = function (userAgent) {
+        var ua = userAgent.toLowerCase();
+        if (ua.indexOf('msie') === 0 && ua.indexOf('trident') === 0) {
+            return false;
+        }
+
+        var match = /(?:msie|rv:)\s?([\d\.]+)/.exec(ua);
+        if (match && parseInt(match[1], 10) >= 10) {
+            return true;
+        }
+
+        return false;
     };
 
     return this;
