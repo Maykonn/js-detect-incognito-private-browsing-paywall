@@ -120,32 +120,15 @@ var BrowserFactory = function () {
     var _resolve = function (BrowsingModeDetector) {
         if (window.webkitRequestFileSystem) {
             return new WebkitBrowser(BrowsingModeDetector);
-        } else if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
-            return new FirefoxBrowser(BrowsingModeDetector);
-        } else if (_isIE10OrLater(window.navigator.userAgent)) {
-            return new IE10OrLaterBrowser(BrowsingModeDetector);
-        } else if (window.localStorage && /Safari/.test(window.navigator.userAgent)) {
+        } else if ('MozAppearance' in document.documentElement.style) {
+            return new MozillaBrowser(BrowsingModeDetector);
+        } else if (/constructor/i.test(window.HTMLElement)) {
             return new SafariBrowser(BrowsingModeDetector);
+        } else if (window.PointerEvent || window.MSPointerEvent) {
+            return new IE10EdgeBrowser(BrowsingModeDetector);
+        } else {
+            return new OtherBrowser(BrowsingModeDetector);
         }
-    };
-
-    /**
-     * @param userAgent
-     * @returns {boolean}
-     * @private
-     */
-    var _isIE10OrLater = function (userAgent) {
-        var ua = userAgent.toLowerCase();
-        if (ua.indexOf('msie') === 0 && ua.indexOf('trident') === 0) {
-            return false;
-        }
-
-        var match = /(?:msie|rv:)\s?([\d\.]+)/.exec(ua);
-        if (match && parseInt(match[1], 10) >= 10) {
-            return true;
-        }
-
-        return false;
     };
 
     return this;
@@ -185,10 +168,10 @@ var WebkitBrowser = function (BrowsingModeDetector) {
 
 /**
  * @param {BrowsingModeDetector} BrowsingModeDetector
- * @returns {FirefoxBrowser}
+ * @returns {MozillaBrowser}
  * @constructor
  */
-var FirefoxBrowser = function (BrowsingModeDetector) {
+var MozillaBrowser = function (BrowsingModeDetector) {
     this.BrowsingModeDetector = BrowsingModeDetector;
 
     this.detectBrowsingMode = function () {
@@ -222,29 +205,6 @@ var FirefoxBrowser = function (BrowsingModeDetector) {
         db = indexedDB.open("i");
         db.onsuccess = callbackWhenIndexedDBWorking;
         db.onerror = callbackWhenIndexedDBNotWorking;
-    };
-
-    return this;
-};
-
-/**
- * @param {BrowsingModeDetector} BrowsingModeDetector
- * @returns {IE10OrLaterBrowser}
- * @constructor
- */
-var IE10OrLaterBrowser = function (BrowsingModeDetector) {
-    this.BrowsingModeDetector = BrowsingModeDetector;
-
-    this.detectBrowsingMode = function () {
-        this.BrowsingModeDetector.setBrowsingInNormalMode();
-
-        try {
-            if (!window.indexedDB && (window.PointerEvent || window.MSPointerEvent)) {
-                this.BrowsingModeDetector.setBrowsingInIncognitoMode();
-            }
-        } catch (e) {
-            this.BrowsingModeDetector.setBrowsingInIncognitoMode();
-        }
     };
 
     return this;
@@ -288,7 +248,38 @@ var SafariBrowser = function (BrowsingModeDetector) {
                 this.BrowsingModeDetector.setBrowsingInNormalMode();
             }
         }
+    };
 
+    return this;
+};
+
+/**
+ * @param {BrowsingModeDetector} BrowsingModeDetector
+ * @returns {IE10EdgeBrowser}
+ * @constructor
+ */
+var IE10EdgeBrowser = function (BrowsingModeDetector) {
+    this.BrowsingModeDetector = BrowsingModeDetector;
+
+    this.detectBrowsingMode = function () {
+        if (!window.indexedDB) {
+            this.BrowsingModeDetector.setBrowsingInIncognitoMode();
+        }
+    };
+
+    return this;
+};
+
+/**
+ * @param {BrowsingModeDetector} BrowsingModeDetector
+ * @returns {OtherBrowser}
+ * @constructor
+ */
+var OtherBrowser = function (BrowsingModeDetector) {
+    this.BrowsingModeDetector = BrowsingModeDetector;
+
+    this.detectBrowsingMode = function () {
+        this.BrowsingModeDetector.setBrowsingInNormalMode();
     };
 
     return this;
