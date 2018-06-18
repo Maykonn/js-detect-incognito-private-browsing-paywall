@@ -8,31 +8,12 @@
 </head>
 
 <body>
-    <div id="message">Testing...</div>
+<div id="message">Testing...</div>
 </body>
 <script type="application/javascript">
-    // You can use the .getBrowsingMode() method after .do() method
-    var BrowsingModeDetector = new BrowsingModeDetector();
-    BrowsingModeDetector.do();
-
-    var browsingMode = BrowsingModeDetector.getBrowsingMode();
-    console.log('Browsing Mode:', browsingMode);
-    if(browsingMode === BrowsingModeDetector.BROWSING_INCOGNITO_PRIVATE_MODE) {
-        // do something, for example a Paywall screen for this navigation mode...
-    }
-
-
-    // You can test if is bot passing a callback:
-    BrowsingModeDetector.isBotBrowsing(function(isBot) {
-       console.log('Is Bot:', isBot);
-    });
-    // Or without callback:
-    // console.log('Is Bot:', BrowsingModeDetector.isBotBrowsing());
-
-
-    // You can test the navigation mode using a callback too
+    // You can test the browsing mode using a default callback
     var myCallback = function (browsingInIncognitoMode) {
-        console.log('Is Private or Incognito Browsing Mode:', browsingInIncognitoMode);
+        console.log('Is private or incognito?', browsingInIncognitoMode);
 
         var message = document.getElementById("message");
         if (browsingInIncognitoMode) {
@@ -43,12 +24,39 @@
         message.innerHTML = "Normal browsing";
     };
 
-
     // Bots will be ignored:
-    BrowsingModeDetector.do(myCallback);
-    // or BrowsingModeDetector.ignoringBots().do(myCallback);
+    var BrowsingModeDetectorTest1 = new BrowsingModeDetector();
+    BrowsingModeDetectorTest1.do(myCallback);
+    // or BrowsingModeDetectorTest1.ignoringBots().do(myCallback);
 
     // Will return as private/incognito navigation when bots browsing:
-    // BrowsingModeDetector.notIgnoringBots().do(myCallback);
+    // BrowsingModeDetectorTest1.notIgnoringBots().do(myCallback);
+
+
+    var callbackWhenNormalMode = function () {
+        console.log('callbackWhenNormalMode called');
+    };
+
+    var callbackWhenIncognitoOrPrivateMode = function () {
+        console.log('callbackWhenIncognitoOrPrivateMode called');
+    };
+
+    var defaultCallback = function (browsingInIncognitoMode) {
+        console.log('This callback will be called either private or normal mode detected, optional though. Is private or incognito?', browsingInIncognitoMode);
+    };
+
+    var BrowsingModeDetectorTest2 = new BrowsingModeDetector();
+    BrowsingModeDetectorTest2
+        .setCallbackForNormalMode(callbackWhenNormalMode)
+        .setCallbackForIncognitoOrPrivateMode(callbackWhenIncognitoOrPrivateMode)
+        .do(defaultCallback);
+
+
+    // You can test if is bot passing a callback:
+    BrowsingModeDetectorTest2.isBotBrowsing(function (isBot) {
+        console.log('Is Bot:', isBot);
+    });
+    // Or without callback:
+    // console.log('Is Bot:', BrowsingModeDetector.isBotBrowsing());
 </script>
 </html>

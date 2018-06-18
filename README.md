@@ -16,7 +16,7 @@ Passing a callback to `BrowsingModeDetector.do()` method you can implement the n
 var myCallback = function (browsingInIncognitoMode) {
     console.log('Is private or incognito?');
     console.log(browsingInIncognitoMode);
-
+  
     if (browsingInIncognitoMode) {
         // Incognito, Private mode detected
     }
@@ -26,17 +26,33 @@ var BrowsingModeDetector = new BrowsingModeDetector();
 BrowsingModeDetector.do(myCallback);
 ```
 
-You can have the same result, implemented in a different way:
+You can use a default callback combined with specific callbacks for each browsing method:
+
 ```
+var callbackWhenNormalMode = function () {
+    console.log('callbackWhenNormalMode called');
+};
+  
+var callbackWhenIncognitoOrPrivateMode = function () {
+    console.log('callbackWhenIncognitoOrPrivateMode called');
+};
+  
+var defaultCallback = function(browsingInIncognitoMode) {
+    console.log('This callback will be called either private or normal mode detected, optional though. Is private or incognito?', browsingInIncognitoMode);
+};
+  
 var BrowsingModeDetector = new BrowsingModeDetector();
-if(BrowsingModeDetector.do().getBrowsingMode() === BrowsingModeDetector.BROWSING_INCOGNITO_PRIVATE_MODE) {
-    console.log('PRIVATE MODE DETECTED');
-    // Do something...
-}
+BrowsingModeDetector
+    .setCallbackForNormalMode(callbackWhenNormalMode)
+    .setCallbackForIncognitoOrPrivateMode(callbackWhenIncognitoOrPrivateMode)
+    .do(defaultCallback); // optional if callbacks are given for normal and private modes
 ```
 
-Note that when you pass a callback to `.do(callback)` method the return will be the callback, and when a callback is not
-given to `.do()` method the return will be a instance of `BrowsingModeDetector` object.
+Possible callbacks arrangements:
+
+- Only Default Callback
+- Default Callback combined with Normal Mode and Private/Incognito Mode Callbacks
+- Callback for Normal Mode and Callback for Private Mode
 
 ### Ignoring (or not) browsing mode for Bots
 If you have a Website, probably you want to ignore if Bots are browsing:

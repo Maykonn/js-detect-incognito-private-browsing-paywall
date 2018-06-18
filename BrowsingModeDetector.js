@@ -8,6 +8,8 @@
 var BrowsingModeDetector = function () {
     var _ignoringBots = true;
     var _browsingInIncognitoMode;
+    var _callbackForNormalMode;
+    var _callbackForIncognitoOrPrivateMode;
 
     this.BROWSING_NORMAL_MODE = 'NORMAL_MODE';
     this.BROWSING_INCOGNITO_PRIVATE_MODE = 'INCOGNITO_PRIVATE_MODE';
@@ -29,6 +31,7 @@ var BrowsingModeDetector = function () {
     };
 
     this.getBrowsingMode = function () {
+        console.log('_browsingInIncognitoMode', _browsingInIncognitoMode);
         return (_browsingInIncognitoMode ? this.BROWSING_INCOGNITO_PRIVATE_MODE : this.BROWSING_NORMAL_MODE);
     };
 
@@ -50,9 +53,34 @@ var BrowsingModeDetector = function () {
     };
 
     /**
-     * @param callback optional
+     * @param callback
+     * @returns {BrowsingModeDetector}
      */
-    this.do = function (callback) {
+    this.setCallbackForNormalMode = function (callback) {
+        _callbackForNormalMode = callback;
+        return this;
+    };
+
+    /**
+     * @param callback
+     * @returns {BrowsingModeDetector}
+     */
+    this.setCallbackForIncognitoOrPrivateMode = function (callback) {
+        _callbackForIncognitoOrPrivateMode = callback;
+        return this;
+    };
+
+    /**
+     * @param defaultCallback optional
+     */
+    this.do = function (defaultCallback) {
+        if (
+            typeof defaultCallback !== 'function' &&
+            (typeof _callbackForNormalMode !== 'function' || typeof _callbackForIncognitoOrPrivateMode !== 'function')
+        ) {
+            throw 'Default callback or specific callbacks are required';
+        }
+
         if (_ignoringBots && this.isBotBrowsing()) {
             return _browsingInIncognitoMode = false;
         }
@@ -66,7 +94,15 @@ var BrowsingModeDetector = function () {
                 return typeof _browsingInIncognitoMode !== 'undefined';
             },
             function () {
-                return (typeof callback === 'undefined' ? this : callback(_browsingInIncognitoMode));
+                if (_browsingInIncognitoMode && typeof _callbackForIncognitoOrPrivateMode === 'function') {
+                    _callbackForIncognitoOrPrivateMode();
+                } else if (!_browsingInIncognitoMode && typeof  _callbackForNormalMode === 'function') {
+                    _callbackForNormalMode();
+                }
+
+                if (typeof defaultCallback !== 'undefined') {
+                    defaultCallback(_browsingInIncognitoMode)
+                }
             }
         );
     };
