@@ -11,6 +11,26 @@
     <div id="message">Testing...</div>
 </body>
 <script type="application/javascript">
+    // You can use the .getBrowsingMode() method after .do() method
+    var BrowsingModeDetector = new BrowsingModeDetector();
+    BrowsingModeDetector.do();
+
+    var browsingMode = BrowsingModeDetector.getBrowsingMode();
+    console.log('Browsing Mode:', browsingMode);
+    if(browsingMode === BrowsingModeDetector.BROWSING_INCOGNITO_PRIVATE_MODE) {
+        // do something, for example a Paywall screen for this navigation mode...
+    }
+
+
+    // You can test if is bot passing a callback:
+    BrowsingModeDetector.isBotBrowsing(function(isBot) {
+       console.log('Is Bot:', isBot);
+    });
+    // Or without callback:
+    // console.log('Is Bot:', BrowsingModeDetector.isBotBrowsing());
+
+
+    // You can test the navigation mode using a callback too
     var myCallback = function (browsingInIncognitoMode) {
         console.log('Is Private or Incognito Browsing Mode:', browsingInIncognitoMode);
 
@@ -23,14 +43,10 @@
         message.innerHTML = "Normal browsing";
     };
 
-    var BrowsingModeDetector = new BrowsingModeDetector();
 
     // Bots will be ignored:
     BrowsingModeDetector.do(myCallback);
     // or BrowsingModeDetector.ignoringBots().do(myCallback);
-
-    // You can just test if is bot, with:
-    console.log('Is Bot:', BrowsingModeDetector.isBotBrowsing());
 
     // Will return as private/incognito navigation when bots browsing:
     // BrowsingModeDetector.notIgnoringBots().do(myCallback);

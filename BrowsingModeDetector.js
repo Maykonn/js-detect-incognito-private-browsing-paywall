@@ -6,6 +6,9 @@ var BrowsingModeDetector = function () {
     var _ignoringBots = true;
     var _browsingInIncognitoMode;
 
+    this.BROWSING_NORMAL_MODE = 'NORMAL_MODE';
+    this.BROWSING_INCOGNITO_PRIVATE_MODE = 'INCOGNITO_PRIVATE_MODE';
+
     /**
      * @returns {BrowsingModeDetector}
      */
@@ -23,28 +26,28 @@ var BrowsingModeDetector = function () {
     };
 
     this.getBrowsingMode = function () {
-        return _browsingInIncognitoMode;
+        return (_browsingInIncognitoMode ? this.BROWSING_INCOGNITO_PRIVATE_MODE : this.BROWSING_NORMAL_MODE);
     };
 
-    this.browsingInIncognitoMode = function () {
+    this.setBrowsingInIncognitoMode = function () {
         _browsingInIncognitoMode = true;
     };
 
-    this.browsingInNormalMode = function () {
+    this.setBrowsingInNormalMode = function () {
         _browsingInIncognitoMode = false;
     };
 
     /**
-     * @returns {boolean}
+     * @param callback optional
      */
-    this.isBotBrowsing = function () {
+    this.isBotBrowsing = function (callback) {
         var userAgentToTest = window.navigator.userAgent;
-        return /googlebot|Googlebot-Mobile|Googlebot-Image|Google favicon|Mediapartners-Google|bingbot|slurp|java|wget|curl|Commons-HttpClient|Python-urllib|libwww|httpunit|nutch|phpcrawl|msnbot|jyxobot|FAST-WebCrawler|FAST Enterprise Crawler|biglotron|teoma|convera|seekbot|gigablast|exabot|ngbot|ia_archiver|GingerCrawler|webmon |httrack|webcrawler|grub.org|UsineNouvelleCrawler|antibot|netresearchserver|speedy|fluffy|bibnum.bnf|findlink|msrbot|panscient|yacybot|AISearchBot|IOI|ips-agent|tagoobot|MJ12bot|dotbot|woriobot|yanga|buzzbot|mlbot|yandexbot|purebot|Linguee Bot|Voyager|CyberPatrol|voilabot|baiduspider|citeseerxbot|spbot|twengabot|postrank|turnitinbot|scribdbot|page2rss|sitebot|linkdex|Adidxbot|blekkobot|ezooms|dotbot|Mail.RU_Bot|discobot|heritrix|findthatfile|europarchive.org|NerdByNature.Bot|sistrix crawler|ahrefsbot|Aboundex|domaincrawler|wbsearchbot|summify|ccbot|edisterbot|seznambot|ec2linkfinder|gslfbot|aihitbot|intelium_bot|facebookexternalhit|yeti|RetrevoPageAnalyzer|lb-spider|sogou|lssbot|careerbot|wotbox|wocbot|ichiro|DuckDuckBot|lssrocketcrawler|drupact|webcompanycrawler|acoonbot|openindexspider|gnam gnam spider|web-archive-net.com.bot|backlinkcrawler|coccoc|integromedb|content crawler spider|toplistbot|seokicks-robot|it2media-domain-crawler|ip-web-crawler.com|siteexplorer.info|elisabot|proximic|changedetection|blexbot|arabot|WeSEE:Search|niki-bot|CrystalSemanticsBot|rogerbot|360Spider|psbot|InterfaxScanBot|Lipperhey SEO Service|CC Metadata Scaper|g00g1e.net|GrapeshotCrawler|urlappendbot|brainobot|fr-crawler|binlar|SimpleCrawler|Livelapbot|Twitterbot|cXensebot|smtbot|bnf.fr_bot|A6-Indexer|ADmantX|Facebot|Twitterbot|OrangeBot|memorybot|AdvBot|MegaIndex|SemanticScholarBot|ltx71|nerdybot|xovibot|BUbiNG|Qwantify|archive.org_bot|Applebot|TweetmemeBot|crawler4j|findxbot|SemrushBot|yoozBot|lipperhey|y!j-asr|Domain Re-Animator Bot|AddThis/i.test(userAgentToTest);
+        var isBot = /googlebot|Googlebot-Mobile|Googlebot-Image|Google favicon|Mediapartners-Google|bingbot|slurp|java|wget|curl|Commons-HttpClient|Python-urllib|libwww|httpunit|nutch|phpcrawl|msnbot|jyxobot|FAST-WebCrawler|FAST Enterprise Crawler|biglotron|teoma|convera|seekbot|gigablast|exabot|ngbot|ia_archiver|GingerCrawler|webmon |httrack|webcrawler|grub.org|UsineNouvelleCrawler|antibot|netresearchserver|speedy|fluffy|bibnum.bnf|findlink|msrbot|panscient|yacybot|AISearchBot|IOI|ips-agent|tagoobot|MJ12bot|dotbot|woriobot|yanga|buzzbot|mlbot|yandexbot|purebot|Linguee Bot|Voyager|CyberPatrol|voilabot|baiduspider|citeseerxbot|spbot|twengabot|postrank|turnitinbot|scribdbot|page2rss|sitebot|linkdex|Adidxbot|blekkobot|ezooms|dotbot|Mail.RU_Bot|discobot|heritrix|findthatfile|europarchive.org|NerdByNature.Bot|sistrix crawler|ahrefsbot|Aboundex|domaincrawler|wbsearchbot|summify|ccbot|edisterbot|seznambot|ec2linkfinder|gslfbot|aihitbot|intelium_bot|facebookexternalhit|yeti|RetrevoPageAnalyzer|lb-spider|sogou|lssbot|careerbot|wotbox|wocbot|ichiro|DuckDuckBot|lssrocketcrawler|drupact|webcompanycrawler|acoonbot|openindexspider|gnam gnam spider|web-archive-net.com.bot|backlinkcrawler|coccoc|integromedb|content crawler spider|toplistbot|seokicks-robot|it2media-domain-crawler|ip-web-crawler.com|siteexplorer.info|elisabot|proximic|changedetection|blexbot|arabot|WeSEE:Search|niki-bot|CrystalSemanticsBot|rogerbot|360Spider|psbot|InterfaxScanBot|Lipperhey SEO Service|CC Metadata Scaper|g00g1e.net|GrapeshotCrawler|urlappendbot|brainobot|fr-crawler|binlar|SimpleCrawler|Livelapbot|Twitterbot|cXensebot|smtbot|bnf.fr_bot|A6-Indexer|ADmantX|Facebot|Twitterbot|OrangeBot|memorybot|AdvBot|MegaIndex|SemanticScholarBot|ltx71|nerdybot|xovibot|BUbiNG|Qwantify|archive.org_bot|Applebot|TweetmemeBot|crawler4j|findxbot|SemrushBot|yoozBot|lipperhey|y!j-asr|Domain Re-Animator Bot|AddThis/i.test(userAgentToTest);
+        return (typeof callback === 'undefined' ? isBot : callback(isBot));
     };
 
     /**
-     * @param callback
-     * @returns {boolean}
+     * @param callback optional
      */
     this.do = function (callback) {
         if (_ignoringBots && this.isBotBrowsing()) {
@@ -60,7 +63,7 @@ var BrowsingModeDetector = function () {
                 return typeof _browsingInIncognitoMode !== 'undefined';
             },
             function () {
-                callback(_browsingInIncognitoMode);
+                return (typeof callback === 'undefined' ? this : callback(_browsingInIncognitoMode));
             }
         );
     };
@@ -153,12 +156,12 @@ var WebkitBrowser = function (BrowsingModeDetector) {
         var self = this;
 
         var callbackWhenWebkitRequestFileSystemIsON = function () {
-            self.BrowsingModeDetector.browsingInNormalMode();
+            self.BrowsingModeDetector.setBrowsingInNormalMode();
         };
 
         var callbackWhenWebkitRequestFileSystemIsOFF = function (e) {
             console.log(e);
-            self.BrowsingModeDetector.browsingInIncognitoMode();
+            self.BrowsingModeDetector.setBrowsingInIncognitoMode();
         };
 
         window.webkitRequestFileSystem(
@@ -185,7 +188,7 @@ var FirefoxBrowser = function (BrowsingModeDetector) {
         var self = this;
 
         var callbackWhenIndexedDBWorking = function (e) {
-            if (typeof self.BrowsingModeDetector.getBrowsingMode() === "undefined") {
+            if (typeof self.BrowsingModeDetector.getBrowsingMode() === 'undefined') {
                 self.BrowsingModeDetector.retry(
                     function () {
                         return db.readyState === 'done';
@@ -196,7 +199,7 @@ var FirefoxBrowser = function (BrowsingModeDetector) {
                         }
 
                         if (db.result) {
-                            self.BrowsingModeDetector.browsingInNormalMode();
+                            self.BrowsingModeDetector.setBrowsingInNormalMode();
                         }
                     }
                 );
@@ -205,7 +208,7 @@ var FirefoxBrowser = function (BrowsingModeDetector) {
 
         var callbackWhenIndexedDBNotWorking = function (e) {
             // On Firefox ESR versions, actually IndexedDB don't works.
-            self.BrowsingModeDetector.browsingInIncognitoMode();
+            self.BrowsingModeDetector.setBrowsingInIncognitoMode();
         };
 
         db = indexedDB.open("i");
@@ -225,14 +228,14 @@ var IE10OrLaterBrowser = function (BrowsingModeDetector) {
     this.BrowsingModeDetector = BrowsingModeDetector;
 
     this.detectBrowsingMode = function () {
-        this.BrowsingModeDetector.browsingInNormalMode();
+        this.BrowsingModeDetector.setBrowsingInNormalMode();
 
         try {
             if (!window.indexedDB) {
-                this.BrowsingModeDetector.browsingInIncognitoMode();
+                this.BrowsingModeDetector.setBrowsingInIncognitoMode();
             }
         } catch (e) {
-            this.BrowsingModeDetector.browsingInIncognitoMode();
+            this.BrowsingModeDetector.setBrowsingInIncognitoMode();
         }
     };
 
@@ -251,11 +254,11 @@ var SafariBrowser = function (BrowsingModeDetector) {
         try {
             window.localStorage.setItem('i', 'o');
         } catch (e) {
-            this.BrowsingModeDetector.browsingInIncognitoMode();
+            this.BrowsingModeDetector.setBrowsingInIncognitoMode();
         }
 
         if (typeof this.BrowsingModeDetector.getBrowsingMode() === 'undefined') {
-            this.BrowsingModeDetector.browsingInNormalMode();
+            this.BrowsingModeDetector.setBrowsingInNormalMode();
             window.localStorage.removeItem('i');
         }
     };

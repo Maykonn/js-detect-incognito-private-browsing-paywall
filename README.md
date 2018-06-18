@@ -16,19 +16,27 @@ Passing a callback to `BrowsingModeDetector.do()` method you can implement the n
 var myCallback = function (browsingInIncognitoMode) {
     console.log('Is private or incognito?');
     console.log(browsingInIncognitoMode);
-    
-    var message = document.getElementById("message");
+
     if (browsingInIncognitoMode) {
-        message.innerHTML = "Incognito/Private browsing detected!";
-        return;
+        // Incognito, Private mode detected
     }
-    
-    message.innerHTML = "Normal browsing";
 };
   
 var BrowsingModeDetector = new BrowsingModeDetector();
 BrowsingModeDetector.do(myCallback);
 ```
+
+You can have the same result, implemented in a different way:
+```
+var BrowsingModeDetector = new BrowsingModeDetector();
+if(BrowsingModeDetector.do().getBrowsingMode() === BrowsingModeDetector.BROWSING_INCOGNITO_PRIVATE_MODE) {
+    console.log('PRIVATE MODE DETECTED');
+    // Do something...
+}
+```
+
+Note that when you pass a callback to `.do(callback)` method the return will be the callback, and when a callback is not
+given to `.do()` method the return will be a instance of `BrowsingModeDetector` object.
 
 ### Ignoring (or not) browsing mode for Bots
 If you have a Website, probably you want to ignore if Bots are browsing:
@@ -38,16 +46,24 @@ BrowsingModeDetector.do(myCallback);
 // or BrowsingModeDetector.ignoringBots().do(myCallback);
 ```
 
-Or not (`.do()` always will return `false` to callback):
+Or testing for Bots too(e.g: if Googlebot browse your site, the detector will return that browsing mode is private):
 ```
 var BrowsingModeDetector = new BrowsingModeDetector();
 BrowsingModeDetector.notIgnoringBots().do(myCallback);
 ```
 
 ### Bot Browsing Detection:
-You can test if is a Bot browsing too:
+You can test if is a Bot browsing in two ways:
 ```
-console.log('Is Bot:', BrowsingModeDetector.isBotBrowsing());
+var isBot = BrowsingModeDetector.isBotBrowsing();
+console.log('Is Bot:', isBot);
+```
+
+Or passing a callback to isBotBrowsing method:
+```
+var isBot = BrowsingModeDetector.isBotBrowsing(function(isBot) {
+    console.log('Is Bot:', isBot);
+});
 ```
 
 ### Examples:
