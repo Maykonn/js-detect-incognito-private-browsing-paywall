@@ -239,7 +239,7 @@ var IE10OrLaterBrowser = function (BrowsingModeDetector) {
         this.BrowsingModeDetector.setBrowsingInNormalMode();
 
         try {
-            if (!window.indexedDB) {
+            if (!window.indexedDB && (window.PointerEvent || window.MSPointerEvent)) {
                 this.BrowsingModeDetector.setBrowsingInIncognitoMode();
             }
         } catch (e) {
