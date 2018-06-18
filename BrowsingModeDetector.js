@@ -151,7 +151,6 @@ var WebkitBrowser = function (BrowsingModeDetector) {
         };
 
         var callbackWhenWebkitRequestFileSystemIsOFF = function (e) {
-            console.log(e);
             self.BrowsingModeDetector.setBrowsingInIncognitoMode();
         };
 
