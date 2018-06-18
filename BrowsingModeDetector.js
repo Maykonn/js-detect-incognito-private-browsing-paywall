@@ -1,6 +1,9 @@
 /**
+ * BrowsingModeDetector
+ *
  * @returns {BrowsingModeDetector}
  * @constructor
+ * @author Maykonn Welington Candido <maykonn@outlook.com>
  */
 var BrowsingModeDetector = function () {
     var _ignoringBots = true;
