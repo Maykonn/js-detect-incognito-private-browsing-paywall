@@ -31,7 +31,6 @@ var BrowsingModeDetector = function () {
     };
 
     this.getBrowsingMode = function () {
-        console.log('_browsingInIncognitoMode', _browsingInIncognitoMode);
         return (_browsingInIncognitoMode ? this.BROWSING_INCOGNITO_PRIVATE_MODE : this.BROWSING_NORMAL_MODE);
     };
 
