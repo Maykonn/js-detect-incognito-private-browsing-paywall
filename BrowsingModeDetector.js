@@ -80,8 +80,21 @@ var BrowsingModeDetector = function () {
             throw 'Default callback or specific callbacks are required';
         }
 
+        var _callback = function () {
+            if (_browsingInIncognitoMode && typeof _callbackForIncognitoOrPrivateMode === 'function') {
+                _callbackForIncognitoOrPrivateMode();
+            } else if (!_browsingInIncognitoMode && typeof  _callbackForNormalMode === 'function') {
+                _callbackForNormalMode();
+            }
+
+            if (typeof defaultCallback !== 'undefined') {
+                defaultCallback(_browsingInIncognitoMode)
+            }
+        };
+
         if (_ignoringBots && this.isBotBrowsing()) {
-            return _browsingInIncognitoMode = false;
+            _browsingInIncognitoMode = false;
+            _callback();
         }
 
         (new BrowserFactory())
@@ -92,17 +105,7 @@ var BrowsingModeDetector = function () {
             function () {
                 return typeof _browsingInIncognitoMode !== 'undefined';
             },
-            function () {
-                if (_browsingInIncognitoMode && typeof _callbackForIncognitoOrPrivateMode === 'function') {
-                    _callbackForIncognitoOrPrivateMode();
-                } else if (!_browsingInIncognitoMode && typeof  _callbackForNormalMode === 'function') {
-                    _callbackForNormalMode();
-                }
-
-                if (typeof defaultCallback !== 'undefined') {
-                    defaultCallback(_browsingInIncognitoMode)
-                }
-            }
+            _callback
         );
     };
 
