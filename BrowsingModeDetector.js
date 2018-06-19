@@ -209,36 +209,11 @@ var MozillaBrowser = function (BrowsingModeDetector) {
     this.BrowsingModeDetector = BrowsingModeDetector;
 
     this.detectBrowsingMode = function () {
-        var db;
-        var self = this;
-
-        var callbackWhenIndexedDBWorking = function (e) {
-            if (typeof self.BrowsingModeDetector.getBrowsingMode() === 'undefined') {
-                self.BrowsingModeDetector.retry(
-                    function () {
-                        return db.readyState === 'done';
-                    },
-                    function (isTimeout) {
-                        if (isTimeout) {
-                            return callbackWhenIndexedDBNotWorking(e);
-                        }
-
-                        if (db.result) {
-                            self.BrowsingModeDetector.setBrowsingInNormalMode();
-                        }
-                    }
-                );
-            }
-        };
-
-        var callbackWhenIndexedDBNotWorking = function (e) {
-            // On Firefox ESR versions, actually IndexedDB don't works.
-            self.BrowsingModeDetector.setBrowsingInIncognitoMode();
-        };
-
-        db = indexedDB.open("i");
-        db.onsuccess = callbackWhenIndexedDBWorking;
-        db.onerror = callbackWhenIndexedDBNotWorking;
+        if (navigator.serviceWorker) {
+            this.BrowsingModeDetector.setBrowsingInNormalMode();
+        } else {
+            this.BrowsingModeDetector.setBrowsingInIncognitoMode();
+        }
     };
 
     return this;
