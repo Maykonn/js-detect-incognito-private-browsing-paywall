@@ -12,8 +12,9 @@
 </body>
 <script type="application/javascript">
   // You can test the browsing mode using a default callback
-  var myCallback = function (browsingInIncognitoMode) {
-    console.log('Is private or incognito?', browsingInIncognitoMode);
+  var myCallback = function (browsingInIncognitoMode, BrowsingModeDetectorInstance) {
+    console.log('Is private?', browsingInIncognitoMode);
+    console.log('Browsing Mode:', BrowsingModeDetectorInstance.getBrowsingMode());
 
     var message = document.getElementById("message");
     if (browsingInIncognitoMode) {
@@ -33,16 +34,22 @@
   // BrowsingModeDetectorTest1.notIgnoringBots().do(myCallback);
 
 
-  var callbackWhenNormalMode = function () {
-    console.log('callbackWhenNormalMode called');
+  var callbackWhenNormalMode = function (BrowsingModeDetectorInstance) {
+    console.log('callbackWhenNormalMode called when', BrowsingModeDetectorInstance.getBrowsingMode());
   };
 
-  var callbackWhenIncognitoOrPrivateMode = function () {
-    console.log('callbackWhenIncognitoOrPrivateMode called');
+  var callbackWhenIncognitoOrPrivateMode = function (BrowsingModeDetectorInstance) {
+    console.log('callbackWhenIncognitoOrPrivateMode called when', BrowsingModeDetectorInstance.getBrowsingMode());
   };
 
-  var defaultCallback = function (browsingInIncognitoMode) {
+  var defaultCallback = function (browsingInIncognitoMode, BrowsingModeDetectorInstance) {
     console.log('This callback will be called either private or normal mode detected, optional though. Is private or incognito?', browsingInIncognitoMode);
+
+    if (BrowsingModeDetectorInstance.getBrowsingMode() === BrowsingModeDetectorInstance.BROWSING_NORMAL_MODE) {
+      console.log('Do something if is NORMAL_MODE!');
+    } else {
+      console.log('Do something if is INCOGNITO_PRIVATE_MODE!');
+    }
   };
 
   var BrowsingModeDetectorTest2 = new BrowsingModeDetector();

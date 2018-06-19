@@ -6,6 +6,7 @@
  * @author Maykonn Welington Candido <maykonn@outlook.com>
  */
 var BrowsingModeDetector = function () {
+  var _instance = this;
   var _ignoringBots = true;
   var _browsingInIncognitoMode;
   var _callbackForNormalMode;
@@ -100,13 +101,13 @@ var BrowsingModeDetector = function () {
 
   var _executeUserCallback = function () {
     if (_browsingInIncognitoMode && typeof _callbackForIncognitoOrPrivateMode === 'function') {
-      _callbackForIncognitoOrPrivateMode(this);
+      _callbackForIncognitoOrPrivateMode(_instance);
     } else if (!_browsingInIncognitoMode && typeof _callbackForNormalMode === 'function') {
-      _callbackForNormalMode(this);
+      _callbackForNormalMode(_instance);
     }
 
     if (typeof _callbackDefault !== 'undefined') {
-      _callbackDefault(_browsingInIncognitoMode, this)
+      _callbackDefault(_browsingInIncognitoMode, _instance)
     }
   };
 
