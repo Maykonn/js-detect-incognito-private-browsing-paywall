@@ -86,7 +86,7 @@ Note that will be passed a BrowsingModeDetector instance for each user defined c
 `.do(callback)` method will be passed as first param of callback a boolean value meaning browsing in incognito mode 
 when `true` and a BrowsingModeDetector instance as second param of callback.
 
-### Ignoring (or not) browsing mode for Bots
+### Ignoring (or not) browsing mode for Bots:
 If you have a Website, probably you want to ignore if Bots are browsing:
 ```
 var BrowsingModeDetector = new BrowsingModeDetector();
@@ -114,5 +114,5 @@ var isBot = BrowsingModeDetector.isBotBrowsing(function(isBot) {
 });
 ```
 
-### Examples:
+## Examples:
 For a complete example with JS and HTML see the `example.html` file.
