@@ -1,4 +1,4 @@
-# Javascript Private or Incognito Browsing Detector / Paywall
+# Private or Incognito Browsing Detector / Paywall
 Javascript code to Detect Private and Incognito Browsing Mode. You can implement a Paywall System by detecting private or incognito browsing.
 
 ## Implementing a Paywall System for Private or Incognito Browsing Mode
@@ -8,6 +8,12 @@ This detector can identify Bots Browsing your application and you can turn on/tu
 **With Bot detector on, when Googlebot visit your page you don't block it!**
 
 ## How to use
+
+### Installation
+You can use including the `/dist/BrowsingModeDetector.js` or `/dist/BrowsingModeDetector.gz` direct on your application or
+with npm:
+
+`npm i js-detect-incognito-private-browsing -S`
 
 ### Implementing behaviour based on Browsing Mode:   
 Passing a callback to `BrowsingModeDetector.do()` method you can implement the needed behaviour testing the returned value:
@@ -115,4 +121,4 @@ var isBot = BrowsingModeDetector.isBotBrowsing(function(isBot) {
 ```
 
 ## Examples:
-For a complete example with JS and HTML see the `example.html` file.
+For a complete example with JS and HTML see the `/example/index.html` file.
