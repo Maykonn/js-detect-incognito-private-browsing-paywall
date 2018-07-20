@@ -10,8 +10,7 @@ This detector can identify Bots Browsing your application and you can turn on/tu
 ## How to use
 
 ### Installation
-You can use including the `/dist/BrowsingModeDetector.js` or `/dist/BrowsingModeDetector.gz` direct on your application or
-with npm:
+You can include the `/dist/BrowsingModeDetector.js` or `/dist/BrowsingModeDetector.gz` via `<script>` tag direct on your application or via npm:
 
 `npm i js-detect-incognito-private-browsing -S`
 
@@ -122,3 +121,10 @@ var isBot = BrowsingModeDetector.isBotBrowsing(function(isBot) {
 
 ## Examples:
 For a complete example with JS and HTML see the `/example/index.html` file.
+
+## Contributing
+
+You can contribute cloning this repository from github [clicking here](https://github.com/Maykonn/js-detect-incognito-private-browsing-paywall).
+So, you just need to create a new branch using a name related to the new functionality which you'll create.   
+And after finish your code, you just need to create a pull request which will be revised, merged to master(if the code 
+doesn't break the lib) branch and published a new release of this library. 
