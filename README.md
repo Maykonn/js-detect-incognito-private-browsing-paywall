@@ -122,7 +122,28 @@ var isBot = BrowsingModeDetector.isBotBrowsing(function(isBot) {
 ## Examples:
 For a complete example with JS and HTML see the `/example/index.html` file.
 
-## Contributing
+## Compiling the code:
+Clone this repo and you can use npm and webpack to compile the code.
+Install the requirements:   
+
+```
+git clone https://github.com/Maykonn/js-detect-incognito-private-browsing-paywall
+npm install
+``` 
+
+In your dev environment you can run (will compile the code and open the example app at localhost:8080/):
+```
+npm run start
+```
+
+Build the code to production at `/dist` directory (minify, uglify, remove comments, logs, etc):
+```
+npm run build
+```
+
+The `npm run build` command will generate two file at /dist directory, BrowsingModeDetector.gz and BrowsingModeDetector.js.
+
+## Contributing:
 
 You can contribute cloning this repository from github [clicking here](https://github.com/Maykonn/js-detect-incognito-private-browsing-paywall).
 So, you just need to create a new branch using a name related to the new functionality which you'll create.   

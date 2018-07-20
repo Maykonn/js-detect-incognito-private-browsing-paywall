@@ -41,5 +41,5 @@
     "build": "webpack --config webpack.prod.config.js --progress"
   },
   "license": "MIT",
-  "version": "1.0.3"
+  "version": "1.0.4"
 }
