@@ -1,0 +1,9 @@
+.idea
+node_modules
+*.log
+*.log.*
+.webpack
+.vscode
+.DS_Store
+/nbproject/*
+bkp.*

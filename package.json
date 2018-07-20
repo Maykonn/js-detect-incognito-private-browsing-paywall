@@ -1,0 +1,45 @@
+{
+  "name": "js-detect-incognito-private-browsing",
+  "description": "Javascript Code to Detect Private or Incognito Browsing (with Bot detector) and Paywall",
+  "keywords": [
+    "javascript",
+    "browsing-mode",
+    "detection",
+    "detect",
+    "incognito",
+    "paywall",
+    "bot",
+    "js-detect-incognito-browsing",
+    "js-detect-private-browsing",
+    "js-detect-incognito-mode",
+    "js-detect-private-mode",
+    "private-mode",
+    "incognito-mode"
+  ],
+  "author": "Maykonn Welington Candido <maykonn@outlook.com> (https://github.com/Maykonn)",
+  "dependencies": {
+    "es6-shim": "^0.35.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "body-parser": "^1.18.2",
+    "compression-webpack-plugin": "^1.1.3",
+    "express": "^4.16.2",
+    "json-loader": "^0.5.7",
+    "path": "^0.12.7",
+    "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.9.2",
+    "webpack-dev-middleware": "^2.0.4",
+    "webpack-dev-server": "^2.9.7",
+    "webpack-merge": "^4.1.1"
+  },
+  "main": "./dist/BrowsingModeDetector.js",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.dev.config.js --open",
+    "build": "webpack --config webpack.prod.config.js --progress"
+  },
+  "license": "MIT",
+  "version": "1.0.0"
+}

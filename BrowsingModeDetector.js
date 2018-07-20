@@ -5,7 +5,7 @@
  * @constructor
  * @author Maykonn Welington Candido <maykonn@outlook.com>
  */
-var BrowsingModeDetector = function () {
+window.BrowsingModeDetector = function () {
   var _instance = this;
   var _ignoringBots = true;
   var _browsingInIncognitoMode;
