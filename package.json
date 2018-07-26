@@ -1,5 +1,6 @@
 {
   "name": "js-detect-incognito-private-browsing",
+  "homepage": "https://github.com/Maykonn/js-detect-incognito-private-browsing-paywall",
   "description": "Javascript Code to Detect Private or Incognito Browsing (with Bot detector) and Paywall",
   "keywords": [
     "javascript",
@@ -17,6 +18,10 @@
     "incognito-mode"
   ],
   "author": "Maykonn Welington Candido <maykonn@outlook.com> (https://github.com/Maykonn)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Maykonn/js-detect-incognito-private-browsing-paywall"
+  },
   "dependencies": {
     "es6-shim": "^0.35.3"
   },
@@ -41,5 +46,5 @@
     "build": "webpack --config webpack.prod.config.js --progress"
   },
   "license": "MIT",
-  "version": "1.0.4"
+  "version": "1.0.5"
 }
