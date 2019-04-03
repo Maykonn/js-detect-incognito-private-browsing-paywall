@@ -167,11 +167,13 @@ var WebkitBrowser = function (BrowsingModeDetector) {
     var callbackWhenWebkitRequestFileSystemIsON = function () {
       self.BrowsingModeDetector.setBrowsingInNormalMode();
       _executeUserCallback();
+      return;
     };
 
     var callbackWhenWebkitRequestFileSystemIsOFF = function () {
       self.BrowsingModeDetector.setBrowsingInIncognitoMode();
       _executeUserCallback();
+      return;
     };
 
     window.webkitRequestFileSystem(
