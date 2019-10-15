@@ -159,10 +159,36 @@ var BrowserFactory = function () {
  * @constructor
  */
 var WebkitBrowser = function (BrowsingModeDetector) {
+  this.STORAGE_QUOTA_LIMIT = 120000000; // There’s a hard limit of 120MB while this is not the case for non-incognito window
   this.BrowsingModeDetector = BrowsingModeDetector;
 
   this.detectBrowsingMode = function (_executeUserCallback) {
     var self = this;
+
+    var callbackWhenWebkitStorageQuotaNotLimited = function () {
+      self.BrowsingModeDetector.setBrowsingInNormalMode();
+      _executeUserCallback();
+    };
+
+    var callbackWhenWebkitStorageQuotaLimited = function () {
+      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
+      _executeUserCallback();
+    };
+
+    var checkStorageQuota = function () {
+      if (typeof navigator.storage != 'undefined' && 
+      typeof navigator.storage.estimate != 'undefined') {
+        navigator.storage.estimate().then(function(estimate) {
+          if (estimate.quota < self.STORAGE_QUOTA_LIMIT){
+            callbackWhenWebkitStorageQuotaLimited();
+          } else {
+            callbackWhenWebkitStorageQuotaNotLimited();
+          }	
+        });
+      } else {
+        callbackWhenWebkitStorageQuotaNotLimited();
+      }
+    };
 
     var callbackWhenWebkitRequestFileSystemIsON = function () {
       self.BrowsingModeDetector.setBrowsingInNormalMode();
@@ -170,8 +196,7 @@ var WebkitBrowser = function (BrowsingModeDetector) {
     };
 
     var callbackWhenWebkitRequestFileSystemIsOFF = function () {
-      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
-      _executeUserCallback();
+      checkStorageQuota();
     };
 
     window.webkitRequestFileSystem(
