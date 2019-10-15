@@ -164,12 +164,12 @@ var WebkitBrowser = function (BrowsingModeDetector) {
   this.detectBrowsingMode = function (_executeUserCallback) {
     var self = this;
 
-    var callbackwhenWebkitStorageQuotaNotLimited = function () {
+    var callbackWhenWebkitStorageQuotaNotLimited = function () {
       self.BrowsingModeDetector.setBrowsingInNormalMode();
       _executeUserCallback();
     };
 
-    var callbackwhenWebkitStorageQuotaLimited = function () {
+    var callbackWhenWebkitStorageQuotaLimited = function () {
       self.BrowsingModeDetector.setBrowsingInIncognitoMode();
       _executeUserCallback();
     };
@@ -179,13 +179,13 @@ var WebkitBrowser = function (BrowsingModeDetector) {
       typeof navigator.storage.estimate != 'undefined') {
         navigator.storage.estimate().then(function(estimate) {
           if (estimate.quota < 120000000){
-            callbackwhenWebkitStorageQuotaLimited();
+            callbackWhenWebkitStorageQuotaLimited();
           } else {
-            callbackwhenWebkitStorageQuotaNotLimited();
+            callbackWhenWebkitStorageQuotaNotLimited();
           }	
         });
       } else {
-        callbackwhenWebkitStorageQuotaNotLimited();
+        callbackWhenWebkitStorageQuotaNotLimited();
       }
     };
 
