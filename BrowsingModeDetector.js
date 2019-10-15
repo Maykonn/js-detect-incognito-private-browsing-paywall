@@ -164,14 +164,38 @@ var WebkitBrowser = function (BrowsingModeDetector) {
   this.detectBrowsingMode = function (_executeUserCallback) {
     var self = this;
 
+    var callbackwhenWebkitStorageQuotaNotLimited = function () {
+      self.BrowsingModeDetector.setBrowsingInNormalMode();
+      _executeUserCallback();
+    };
+
+    var callbackwhenWebkitStorageQuotaLimited = function () {
+      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
+      _executeUserCallback();
+    };
+
+    var checkStorageQuota = function () {
+      if (typeof navigator.storage != 'undefined' && 
+      typeof navigator.storage.estimate != 'undefined') {
+        navigator.storage.estimate().then(function(estimate) {
+          if (estimate.quota < 120000000){
+            callbackwhenWebkitStorageQuotaLimited();
+          } else {
+            callbackwhenWebkitStorageQuotaNotLimited();
+          }	
+        });
+      } else {
+        callbackwhenWebkitStorageQuotaNotLimited();
+      }
+    };
+
     var callbackWhenWebkitRequestFileSystemIsON = function () {
       self.BrowsingModeDetector.setBrowsingInNormalMode();
       _executeUserCallback();
     };
 
     var callbackWhenWebkitRequestFileSystemIsOFF = function () {
-      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
-      _executeUserCallback();
+      checkStorageQuota();
     };
 
     window.webkitRequestFileSystem(
