@@ -107,7 +107,7 @@ window.BrowsingModeDetector = function () {
     }
 
     if (typeof _callbackDefault !== 'undefined') {
-      _callbackDefault(_browsingInIncognitoMode, _instance)
+      _callbackDefault(_browsingInIncognitoMode, _instance);
     }
   };
 
@@ -136,12 +136,12 @@ var BrowserFactory = function () {
    * @private
    */
   var _resolve = function (BrowsingModeDetector) {
-    if (window.webkitRequestFileSystem) {
-      return new WebkitBrowser(BrowsingModeDetector);
+    if (/constructor/i.test(window.HTMLElement) || navigator.vendor && navigator.vendor.indexOf('Apple') > -1) {
+      return new SafariBrowser(BrowsingModeDetector);
     } else if ('MozAppearance' in document.documentElement.style) {
       return new MozillaBrowser(BrowsingModeDetector);
-    } else if (/constructor/i.test(window.HTMLElement)) {
-      return new SafariBrowser(BrowsingModeDetector);
+    } else if (window.webkitRequestFileSystem) {
+      return new WebkitBrowser(BrowsingModeDetector);
     } else if (window.PointerEvent || window.MSPointerEvent) {
       return new IE10EdgeBrowser(BrowsingModeDetector);
     } else {
@@ -168,11 +168,13 @@ var WebkitBrowser = function (BrowsingModeDetector) {
     var callbackWhenWebkitStorageQuotaNotLimited = function () {
       self.BrowsingModeDetector.setBrowsingInNormalMode();
       _executeUserCallback();
+      return;
     };
 
     var callbackWhenWebkitStorageQuotaLimited = function () {
       self.BrowsingModeDetector.setBrowsingInIncognitoMode();
       _executeUserCallback();
+      return;
     };
 
     var checkStorageQuota = function () {
@@ -239,13 +241,22 @@ var SafariBrowser = function (BrowsingModeDetector) {
   this.BrowsingModeDetector = BrowsingModeDetector;
 
   this.detectBrowsingMode = function (_executeUserCallback) {
+    # From https://github.com/jLynx/PrivateWindowCheck
+    if (window.safariIncognito) {
+      his.BrowsingModeDetector.setBrowsingInIncognitoMode();
+      _executeUserCallback();
+      return;
+    }
     // iOS 11
-    // From gist discussion: https://gist.github.com/cou929/7973956#gistcomment-2272103
+    // From gist discussion: https://gist.github.com/cou929/7973956#gistcomment-2272103 and
+    // https://github.com/jLynx/PrivateWindowCheck
     try {
       window.openDatabase(null, null, null, null);
+      window.localStorage.setItem("test", 1);
     } catch (e) {
       this.BrowsingModeDetector.setBrowsingInIncognitoMode();
       _executeUserCallback();
+      return;
     }
 
     // Older Safari
@@ -269,6 +280,7 @@ var SafariBrowser = function (BrowsingModeDetector) {
     }
 
     _executeUserCallback();
+    return;
   };
 
   return this;
