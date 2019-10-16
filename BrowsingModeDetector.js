@@ -193,12 +193,12 @@ var WebkitBrowser = function (BrowsingModeDetector) {
     };
 
     var callbackWhenWebkitRequestFileSystemIsON = function () {
-      self.BrowsingModeDetector.setBrowsingInNormalMode();
-      _executeUserCallback();
+      checkStorageQuota();
     };
 
     var callbackWhenWebkitRequestFileSystemIsOFF = function () {
-      checkStorageQuota();
+      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
+      _executeUserCallback();
     };
 
     window.webkitRequestFileSystem(
