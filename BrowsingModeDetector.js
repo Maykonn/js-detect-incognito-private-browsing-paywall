@@ -193,12 +193,12 @@ var WebkitBrowser = function (BrowsingModeDetector) {
     };
 
     var callbackWhenWebkitRequestFileSystemIsON = function () {
-      self.BrowsingModeDetector.setBrowsingInNormalMode();
-      _executeUserCallback();
+      checkStorageQuota();
     };
 
     var callbackWhenWebkitRequestFileSystemIsOFF = function () {
-      checkStorageQuota();
+      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
+      _executeUserCallback();
     };
 
     window.webkitRequestFileSystem(
@@ -241,7 +241,7 @@ var SafariBrowser = function (BrowsingModeDetector) {
   this.BrowsingModeDetector = BrowsingModeDetector;
 
   this.detectBrowsingMode = function (_executeUserCallback) {
-    # From https://github.com/jLynx/PrivateWindowCheck
+    // From https://github.com/jLynx/PrivateWindowCheck
     if (window.safariIncognito) {
       his.BrowsingModeDetector.setBrowsingInIncognitoMode();
       _executeUserCallback();
