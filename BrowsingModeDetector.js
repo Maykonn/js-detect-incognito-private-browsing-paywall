@@ -248,12 +248,30 @@ var MozillaBrowser = function (BrowsingModeDetector) {
   this.BrowsingModeDetector = BrowsingModeDetector;
 
   this.detectBrowsingMode = function (_executeUserCallback) {
-    if (navigator.serviceWorker) {
-      this.BrowsingModeDetector.setBrowsingInNormalMode();
-    } else {
-      this.BrowsingModeDetector.setBrowsingInIncognitoMode();
-    }
-    _executeUserCallback();
+    var self = this;
+
+    var callbackWhenIndexedDBSuccess = function () {
+      self.BrowsingModeDetector.setBrowsingInNormalMode();
+      _executeUserCallback();
+      return;
+    };
+
+    var callbackWhenIndexedDBError = function () {
+      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
+      _executeUserCallback();
+      return;
+    };
+
+    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    if (window.indexedDB) {
+      var req = window.indexedDB.open('test');
+      req.onerror = function(event) {
+        callbackWhenIndexedDBError();
+      };
+      req.onsuccess = function(event) {
+        callbackWhenIndexedDBSuccess();
+      };
+    };
   };
 
   return this;
