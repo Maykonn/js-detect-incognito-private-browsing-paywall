@@ -160,14 +160,41 @@ var BrowserFactory = function () {
  */
 var WebkitBrowser = function (BrowsingModeDetector) {
   this.STORAGE_QUOTA_LIMIT = 120000000; // There’s a hard limit of 120MB while this is not the case for non-incognito window
+  this.TEMP_STORAGE_QUOTA_LIMIT = 110000000; // There’s a hard limit of 110MB while this is not the case for non-incognito window
   this.BrowsingModeDetector = BrowsingModeDetector;
 
   this.detectBrowsingMode = function (_executeUserCallback) {
-    var self = this;
-
-    var callbackWhenWebkitStorageQuotaNotLimited = function () {
+    var callbackWhenWebkitTemporaryStorageQuotaNotLimited = function () {
       self.BrowsingModeDetector.setBrowsingInNormalMode();
       _executeUserCallback();
+      return;
+    };
+
+    var callbackWhenWebkitTemporaryStorageQuotaLimited = function () {
+      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
+      _executeUserCallback();
+      return;
+    };
+
+    var checkWebkitTemporaryStorageQuota = function () {
+      if (typeof navigator.webkitTemporaryStorage != 'undefined' && 
+      typeof navigator.webkitTemporaryStorage.queryUsageAndQuota != 'undefined') {
+        navigator.webkitTemporaryStorage.queryUsageAndQuota(function(usedBytes, grantedBytes) {
+          if (grantedBytes < self.TEMP_STORAGE_QUOTA_LIMIT){
+            callbackWhenWebkitTemporaryStorageQuotaLimited();
+          } else {
+            callbackWhenWebkitTemporaryStorageQuotaNotLimited();
+          }
+        }, function(e) {
+          callbackWhenWebkitTemporaryStorageQuotaNotLimited();
+        });
+      } else {
+        callbackWhenWebkitTemporaryStorageQuotaNotLimited();
+      }
+    };
+
+    var callbackWhenWebkitStorageQuotaNotLimited = function () {
+      checkWebkitTemporaryStorageQuota();
       return;
     };
 
@@ -185,7 +212,7 @@ var WebkitBrowser = function (BrowsingModeDetector) {
             callbackWhenWebkitStorageQuotaLimited();
           } else {
             callbackWhenWebkitStorageQuotaNotLimited();
-          }	
+          } 
         });
       } else {
         callbackWhenWebkitStorageQuotaNotLimited();
@@ -200,7 +227,7 @@ var WebkitBrowser = function (BrowsingModeDetector) {
       self.BrowsingModeDetector.setBrowsingInIncognitoMode();
       _executeUserCallback();
     };
-
+    
     window.webkitRequestFileSystem(
       window.TEMPORARY,
       1,
@@ -221,12 +248,30 @@ var MozillaBrowser = function (BrowsingModeDetector) {
   this.BrowsingModeDetector = BrowsingModeDetector;
 
   this.detectBrowsingMode = function (_executeUserCallback) {
-    if (navigator.serviceWorker) {
-      this.BrowsingModeDetector.setBrowsingInNormalMode();
-    } else {
-      this.BrowsingModeDetector.setBrowsingInIncognitoMode();
-    }
-    _executeUserCallback();
+    var self = this;
+
+    var callbackWhenIndexedDBSuccess = function () {
+      self.BrowsingModeDetector.setBrowsingInNormalMode();
+      _executeUserCallback();
+      return;
+    };
+
+    var callbackWhenIndexedDBError = function () {
+      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
+      _executeUserCallback();
+      return;
+    };
+
+    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    if (window.indexedDB) {
+      var req = window.indexedDB.open('test');
+      req.onerror = function(event) {
+        callbackWhenIndexedDBError();
+      };
+      req.onsuccess = function(event) {
+        callbackWhenIndexedDBSuccess();
+      };
+    };
   };
 
   return this;
