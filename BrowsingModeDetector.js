@@ -288,7 +288,7 @@ var SafariBrowser = function (BrowsingModeDetector) {
   this.detectBrowsingMode = function (_executeUserCallback) {
     // From https://github.com/jLynx/PrivateWindowCheck
     if (window.safariIncognito) {
-      his.BrowsingModeDetector.setBrowsingInIncognitoMode();
+      this.BrowsingModeDetector.setBrowsingInIncognitoMode();
       _executeUserCallback();
       return;
     }
