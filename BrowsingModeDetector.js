@@ -159,6 +159,7 @@ var BrowserFactory = function () {
  * @constructor
  */
 var WebkitBrowser = function (BrowsingModeDetector) {
+  var self = this;
   this.STORAGE_QUOTA_LIMIT = 120000000; // There’s a hard limit of 120MB while this is not the case for non-incognito window
   this.TEMP_STORAGE_QUOTA_LIMIT = 110000000; // There’s a hard limit of 110MB while this is not the case for non-incognito window
   this.BrowsingModeDetector = BrowsingModeDetector;
