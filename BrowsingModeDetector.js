@@ -220,21 +220,8 @@ var WebkitBrowser = function (BrowsingModeDetector) {
       }
     };
 
-    var callbackWhenWebkitRequestFileSystemIsON = function () {
-      checkStorageQuota();
-    };
-
-    var callbackWhenWebkitRequestFileSystemIsOFF = function () {
-      self.BrowsingModeDetector.setBrowsingInIncognitoMode();
-      _executeUserCallback();
-    };
-    
-    window.webkitRequestFileSystem(
-      window.TEMPORARY,
-      1,
-      callbackWhenWebkitRequestFileSystemIsON,
-      callbackWhenWebkitRequestFileSystemIsOFF
-    );
+    // The window.webkitRequestFileSystem() is not accessible on Chrome 78
+    checkStorageQuota();
   };
 
   return this;
