@@ -10,6 +10,10 @@ const webpack = require('webpack');
  */
 
 module.exports = merge(common, {
+  mode: 'production',
+  optimization: {
+    minimize: true
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -18,30 +22,6 @@ module.exports = merge(common, {
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: {
-        except: [
-          '$', 'webpackJsonp'
-        ],
-        screw_ie8: true
-      },
-      //sourceMap: true,
-      beautify: false,
-      compress: {
-        warnings: false, // Suppress uglification warnings
-        pure_getters: true,
-        unsafe: true,
-        unsafe_comps: true,
-        screw_ie8: true,
-        drop_console: true,
-        drop_debugger: true
-      },
-      output: {
-        comments: false,
-      },
-      comments: false,
-      exclude: [/\.min\.js$/gi] // skip pre-minified libs
-    }),
     new CompressionPlugin({
       asset: "BrowsingModeDetector.gz",
       threshold: 0
