@@ -250,9 +250,9 @@ var MozillaBrowser = function (BrowsingModeDetector) {
       return;
     };
 
-    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-    if (window.indexedDB) {
-      var req = window.indexedDB.open('test');
+    window.tempIndexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    if (window.tempIndexedDB) {
+      var req = window.tempIndexedDB.open('test');
       req.onerror = function(event) {
         callbackWhenIndexedDBError();
       };
