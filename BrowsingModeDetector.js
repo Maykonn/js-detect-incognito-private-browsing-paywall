@@ -1,3 +1,4 @@
+(function() {
 /**
  * BrowsingModeDetector
  *
@@ -354,3 +355,4 @@ var OtherBrowser = function (BrowsingModeDetector) {
 
   return this;
 };
+}());
